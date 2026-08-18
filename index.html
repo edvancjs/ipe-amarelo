@@ -737,11 +737,30 @@
   </footer>
 
 <script>
+  // Se a pessoa não digitar o +55, completa automaticamente pra evitar que
+  // o número seja interpretado como de outro país (ex: DDD 21 virando +1 dos EUA).
+  function normalizarTelefone(bruto){
+    var valor = bruto.trim();
+    if (valor.charAt(0) === '+'){
+      return '+' + valor.slice(1).replace(/\D/g, '');
+    }
+    var digitos = valor.replace(/\D/g, '');
+    if (digitos.indexOf('55') === 0 && (digitos.length === 12 || digitos.length === 13)){
+      return '+' + digitos;
+    }
+    if (digitos.length === 10 || digitos.length === 11){
+      return '+55' + digitos;
+    }
+    return digitos ? '+' + digitos : '';
+  }
+
   document.getElementById('reserva-form').addEventListener('submit', function(e){
     var form = e.target;
     var nome = document.getElementById('name').value.trim();
     var email = document.getElementById('email').value.trim();
-    var telefone = document.getElementById('phone').value.trim();
+    var phoneInput = document.getElementById('phone');
+    phoneInput.value = normalizarTelefone(phoneInput.value);
+    var telefone = phoneInput.value;
     var btn = form.querySelector('.btn');
     btn.disabled = true;
     btn.textContent = 'Enviando...';
