@@ -208,15 +208,6 @@
     margin-top:9px;
     text-align:center;
   }
-  .form-success{
-    display:none;
-    text-align:center;
-    padding:8px 4px 2px;
-    color:var(--maroon);
-    font-size:1rem;
-    font-weight:800;
-  }
-
   .hero-media{
     position:relative;
   }
@@ -558,24 +549,24 @@
         <p class="sub">O caminho de volta para você mesma, para a mulher que cuida de tudo e de todos, mas que, em algum momento, deixou de se escutar.</p>
         <div class="hero-date">📅 Dia 25 de agosto às 19h30 (Horário de Brasília)</div>
 
-        <form class="form-card" id="reserva-form">
+        <form class="form-card" id="reserva-form" action="https://pagamento.institutoipeamarelo.com/form/a288c354-8f27-4c22-b858-d8f376536170" method="post" target="reserva-frame">
           <p class="lead">Preencha os seus dados abaixo para reservar sua vaga na aula:</p>
           <div class="field">
-            <label for="nome">Nome</label>
-            <input type="text" id="nome" name="nome" placeholder="Seu nome completo" required />
+            <label for="name">Nome</label>
+            <input type="text" id="name" name="name" placeholder="Seu nome completo" required autofocus />
           </div>
           <div class="field">
             <label for="email">E-mail</label>
             <input type="email" id="email" name="email" placeholder="seu@email.com" required />
           </div>
           <div class="field">
-            <label for="telefone">Telefone</label>
-            <input type="tel" id="telefone" name="telefone" placeholder="(00) 00000-0000" required />
+            <label for="phone">Telefone</label>
+            <input type="tel" id="phone" name="phone" placeholder="Ex: +55 11 91234-5678" required />
           </div>
           <button type="submit" class="btn">Quero reservar meu lugar</button>
-          <p class="form-success" id="form-success">Vaga reservada. Você vai receber o link direto no seu WhatsApp.</p>
           <p class="form-note">Vagas limitadas para a transmissão ao vivo.</p>
         </form>
+        <iframe name="reserva-frame" style="display:none" title="envio do formulário"></iframe>
       </div>
 
       <div class="hero-media reveal">
@@ -680,7 +671,7 @@
     <div class="container">
       <div class="date-line">📅 Dia 25 de agosto</div>
       <h2>Garanta sua vaga na MasterClass ao vivo</h2>
-      <button class="btn" type="button" onclick="document.getElementById('reserva-form').scrollIntoView({behavior:'smooth', block:'center'}); document.getElementById('nome').focus();">Garanta minha vaga</button>
+      <button class="btn" type="button" onclick="document.getElementById('reserva-form').scrollIntoView({behavior:'smooth', block:'center'}); document.getElementById('name').focus();">Garanta minha vaga</button>
       <p class="micro">Vagas limitadas para a transmissão ao vivo. Você vai receber o link direto no seu WhatsApp.</p>
     </div>
   </section>
@@ -692,11 +683,14 @@
 
 <script>
   document.getElementById('reserva-form').addEventListener('submit', function(e){
-    e.preventDefault();
     var form = e.target;
-    form.querySelectorAll('.field, .btn').forEach(function(el){ el.style.display = 'none'; });
-    form.querySelector('.lead').style.display = 'none';
-    document.getElementById('form-success').style.display = 'block';
+    var nome = document.getElementById('name').value.trim();
+    var btn = form.querySelector('.btn');
+    btn.disabled = true;
+    btn.textContent = 'Enviando...';
+    window.setTimeout(function(){
+      window.location.href = 'obrigado.html?nome=' + encodeURIComponent(nome);
+    }, 900);
   });
 
   if (window.matchMedia('(prefers-reduced-motion: no-preference)').matches){
