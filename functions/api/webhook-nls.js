@@ -30,7 +30,7 @@ export async function onRequestPost(context) {
     email,
     phone,
     product: {
-      name: "MasterClass: Como Curar o Seu Feminino Ferido",
+      name: "MasterClass: Como Reencontrar Desejo, Alegria e Direção para a Próxima Fase da Sua Vida",
     },
     timestamp: new Date().toISOString(),
   };
