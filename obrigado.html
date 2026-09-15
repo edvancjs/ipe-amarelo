@@ -241,7 +241,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="topbar">
     <div class="container">
       <div class="brand">Instituto <span>Ipê Amarelo</span></div>
-      <div class="date-pill">22 de setembro · 19h30</div>
+      <div class="date-pill" id="proxima-data-pill">Toda terça-feira · 19h30</div>
     </div>
   </div>
 
@@ -264,8 +264,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="step-card">
         <span class="step-num">02</span>
         <h2>Adicione no seu calendário</h2>
-        <p>Pra não esquecer, a MasterClass é dia 22 de setembro, ao vivo, e não vai ficar gravada.</p>
-        <a class="btn" href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=MasterClass%3A%20Reencontrar%20Desejo%2C%20Alegria%20e%20Dire%C3%A7%C3%A3o&dates=20260922T223000Z/20260923T003000Z&details=MasterClass%20ao%20vivo%20com%20Anna%20Patr%C3%ADcia%20Chagas.%20Voc%C3%AA%20vai%20receber%20o%20link%20de%20acesso%20no%20grupo%20do%20WhatsApp.&location=Online" target="_blank" rel="noopener">Adicionar ao Google Calendar</a>
+        <p>Pra não esquecer, a MasterClass é dia <span id="proxima-data-inline">22 de setembro</span>, ao vivo, e não vai ficar gravada.</p>
+        <a class="btn" id="gcal-link" href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=MasterClass%3A%20Reencontrar%20Desejo%2C%20Alegria%20e%20Dire%C3%A7%C3%A3o&dates=DATAS_PLACEHOLDER&details=MasterClass%20ao%20vivo%20com%20Anna%20Patr%C3%ADcia%20Chagas.%20Voc%C3%AA%20vai%20receber%20o%20link%20de%20acesso%20no%20grupo%20do%20WhatsApp.&location=Online" target="_blank" rel="noopener">Adicionar ao Google Calendar</a>
       </div>
     </div>
   </section>
@@ -291,6 +291,60 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       document.getElementById('nome-usuario').textContent = nome.trim().split(' ')[0];
     } else {
       wrap.style.display = 'none';
+    }
+  })();
+
+  // A MasterClass é recorrente, toda terça-feira às 19h30 (Brasília). Em vez de
+  // editar a data no código toda semana, a página calcula sozinha qual é a
+  // próxima terça-feira e atualiza texto e link do Google Calendar. Assim que
+  // passar de terça 19h30, já mostra a data da semana seguinte.
+  (function(){
+    var MESES = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+
+    function agoraBrasilia(){
+      var fmt = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'America/Sao_Paulo',
+        year: 'numeric', month: '2-digit', day: '2-digit',
+        hour: '2-digit', minute: '2-digit', second: '2-digit',
+        hour12: false
+      });
+      var partes = fmt.formatToParts(new Date());
+      var pega = function(tipo){ return parseInt(partes.find(function(p){ return p.type === tipo; }).value, 10); };
+      return new Date(Date.UTC(pega('year'), pega('month') - 1, pega('day'), pega('hour') % 24, pega('minute'), pega('second')));
+    }
+
+    function proximaTerca1930(){
+      var agora = agoraBrasilia();
+      var diaSemana = agora.getUTCDay();
+      var diff = (2 - diaSemana + 7) % 7;
+      var alvo = new Date(Date.UTC(agora.getUTCFullYear(), agora.getUTCMonth(), agora.getUTCDate() + diff, 19, 30, 0));
+      if (agora.getTime() >= alvo.getTime()){
+        alvo = new Date(alvo.getTime() + 7 * 24 * 3600 * 1000);
+      }
+      return alvo;
+    }
+
+    function pad(n){ return n < 10 ? '0' + n : '' + n; }
+
+    var alvo = proximaTerca1930();
+    var diaTexto = alvo.getUTCDate() + ' de ' + MESES[alvo.getUTCMonth()];
+
+    var pill = document.getElementById('proxima-data-pill');
+    if (pill) pill.textContent = diaTexto + ' · 19h30';
+
+    var inline = document.getElementById('proxima-data-inline');
+    if (inline) inline.textContent = diaTexto;
+
+    var gcal = document.getElementById('gcal-link');
+    if (gcal){
+      // alvo já representa 19h30 de Brasília (UTC-3); soma 3h pra virar UTC real.
+      var inicioUTC = new Date(Date.UTC(alvo.getUTCFullYear(), alvo.getUTCMonth(), alvo.getUTCDate(), alvo.getUTCHours() + 3, alvo.getUTCMinutes(), 0));
+      var fimUTC = new Date(inicioUTC.getTime() + 2 * 3600 * 1000);
+      var formatarGCal = function(d){
+        return d.getUTCFullYear() + pad(d.getUTCMonth() + 1) + pad(d.getUTCDate()) + 'T' + pad(d.getUTCHours()) + pad(d.getUTCMinutes()) + '00Z';
+      };
+      var datas = formatarGCal(inicioUTC) + '/' + formatarGCal(fimUTC);
+      gcal.href = gcal.getAttribute('href').replace('DATAS_PLACEHOLDER', datas);
     }
   })();
 </script>
