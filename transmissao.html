@@ -431,7 +431,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     flex-direction:column;
     min-height:0;
   }
-  .chat-suporte-fallback{padding:20px 16px;}
+  .chat-suporte-fallback{padding:14px 16px; border-bottom:1px solid var(--line);}
+  .chat-suporte-fallback p{margin:0 0 10px;}
   .chat-suporte p{color:var(--ink-soft); font-size:0.92rem; line-height:1.5; margin:0 0 14px;}
   .chat-suporte-widget{flex:1; min-height:0;}
   .chat-msg{
@@ -869,7 +870,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         nlcContainer.style.setProperty('height', '100%', 'important');
         nlcContainer.style.setProperty('border-radius', '0', 'important');
         nlcContainer.style.setProperty('box-shadow', 'none', 'important');
-        document.getElementById('chat-suporte-fallback').hidden = true;
+        // O link do WhatsApp fica sempre visível, mesmo com o widget encaixado —
+        // é o plano B se o agente da Never Lose não conseguir enviar mensagem.
         if (window.NeverLoseChat && window.NeverLoseChat.open) window.NeverLoseChat.open();
       } else if ((tentativas || 0) < 10){
         setTimeout(function(){ encaixarWidgetSuporte((tentativas || 0) + 1); }, 500);
