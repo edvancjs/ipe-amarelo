@@ -30,7 +30,7 @@ export async function onRequestPost(context) {
     email,
     phone,
     product: {
-      name: "MasterClass: Como Reencontrar Desejo, Alegria e Direção para a Próxima Fase da Sua Vida",
+      name: "MasterClass: A Próxima Fase da Sua Vida",
     },
     timestamp: new Date().toISOString(),
   };

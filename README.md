@@ -9,4 +9,4 @@ Cloudflare Pages conectado direto a este repositório GitHub. Qualquer `git push
 lp2.institutoipeamarelo.com
 
 ## Páginas
-- `index.html` — MasterClass ao vivo "Como Reencontrar Desejo, Alegria e Direção Para a Próxima Fase da Sua Vida" (22/09, 19h30)
+- `index.html` — MasterClass ao vivo "MasterClass: A Próxima Fase da Sua Vida" (frase completa no H1: "Como Reencontrar Desejo, Alegria e Direção Para a Próxima Fase da Sua Vida"), recorrente toda terça-feira 19h30
