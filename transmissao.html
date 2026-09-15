@@ -831,6 +831,25 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     atualizarContador();
     setInterval(atualizarContador, 8000);
 
+    // Sinal de vida pro painel interno saber quantas pessoas estão ao vivo
+    // de verdade agora (número separado do contador público simulado acima).
+    (function enviarPresenca(){
+      var viewerId = sessionStorage.getItem('viewerId');
+      if (!viewerId){
+        viewerId = 'v_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 10);
+        sessionStorage.setItem('viewerId', viewerId);
+      }
+      function bater(){
+        fetch('/api/presenca', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ viewerId: viewerId })
+        }).catch(function(){});
+      }
+      bater();
+      setInterval(bater, 20000);
+    })();
+
     // Abas Chat / Suporte / Oferta
     // Encaixa o widget de suporte real do Never Lose Sales (agente "MasterClass –
     // Círculo") DENTRO da aba Suporte, em vez de deixá-lo flutuando por cima da

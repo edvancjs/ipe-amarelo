@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Painel | Instituto Ipê Amarelo</title>
+<meta name="robots" content="noindex" />
+<link rel="icon" type="image/png" href="/favicon.png" />
+<style>
+  :root{
+    --bg:#ffffff;
+    --bg-soft:#f5f1ea;
+    --ink:#2a2420;
+    --ink-soft:#655a51;
+    --ink-faint:#8b8079;
+    --maroon:#7c1220;
+    --maroon-deep:#570d17;
+    --line:rgba(42,36,32,0.14);
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:var(--bg-soft);
+    color:var(--ink);
+    font-family:var(--sans);
+  }
+  .cartao{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:36px 32px;
+    width:100%;
+    max-width:360px;
+    box-shadow:0 20px 44px rgba(42,36,32,0.1);
+  }
+  .brand{font-size:1.1rem; font-weight:800; margin-bottom:6px;}
+  .brand span{color:var(--maroon);}
+  h1{font-size:1.15rem; margin:0 0 22px; color:var(--ink-soft); font-weight:600;}
+  label{display:block; font-size:0.85rem; font-weight:700; color:var(--ink-soft); margin-bottom:6px;}
+  input{
+    width:100%;
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:11px 12px;
+    font-family:var(--sans);
+    font-size:0.98rem;
+    margin-bottom:16px;
+    outline:none;
+  }
+  input:focus{border-color:var(--maroon);}
+  button{
+    width:100%;
+    background:var(--maroon);
+    color:#fff;
+    border:none;
+    border-radius:8px;
+    padding:13px;
+    font-family:var(--sans);
+    font-weight:800;
+    font-size:0.98rem;
+    cursor:pointer;
+  }
+  button:hover{background:var(--maroon-deep);}
+  .erro{
+    color:var(--maroon-deep);
+    font-size:0.88rem;
+    margin:-8px 0 14px;
+    display:none;
+  }
+</style>
+</head>
+<body>
+  <div class="cartao">
+    <div class="brand">Instituto <span>Ipê Amarelo</span></div>
+    <h1>Painel da MasterClass</h1>
+    <form id="form-login">
+      <label for="senha">Senha</label>
+      <input type="password" id="senha" autofocus required />
+      <p class="erro" id="erro">Senha incorreta.</p>
+      <button type="submit">Entrar</button>
+    </form>
+  </div>
+
+<script>
+  document.getElementById('form-login').addEventListener('submit', function(e){
+    e.preventDefault();
+    var senha = document.getElementById('senha').value;
+    var erro = document.getElementById('erro');
+    erro.style.display = 'none';
+    fetch('/api/painel/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ senha: senha })
+    }).then(function(r){ return r.json().then(function(d){ return {ok: r.ok, dados: d}; }); })
+      .then(function(res){
+        if (res.ok && res.dados.ok){
+          window.location.href = '/painel.html';
+        } else {
+          erro.style.display = 'block';
+        }
+      }).catch(function(){
+        erro.textContent = 'Erro ao conectar. Tente de novo.';
+        erro.style.display = 'block';
+      });
+  });
+</script>
+</body>
+</html>

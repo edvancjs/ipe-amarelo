@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Painel | Instituto Ipê Amarelo</title>
+<meta name="robots" content="noindex" />
+<link rel="icon" type="image/png" href="/favicon.png" />
+<style>
+  :root{
+    --bg:#ffffff;
+    --bg-soft:#f5f1ea;
+    --ink:#2a2420;
+    --ink-soft:#655a51;
+    --ink-faint:#8b8079;
+    --maroon:#7c1220;
+    --maroon-deep:#570d17;
+    --maroon-tint:#f7e9e7;
+    --line:rgba(42,36,32,0.14);
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg-soft);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.5;
+  }
+  [hidden]{display:none !important;}
+  .container{max-width:1180px; margin:0 auto; padding:0 24px;}
+
+  .topbar{
+    background:#fff;
+    border-bottom:1px solid var(--line);
+    padding:16px 0;
+  }
+  .topbar .container{display:flex; align-items:center; justify-content:space-between; gap:16px;}
+  .brand{font-size:1.1rem; font-weight:800;}
+  .brand span{color:var(--maroon);}
+  .btn-sair{
+    background:none;
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:8px 14px;
+    font-family:var(--sans);
+    font-size:0.85rem;
+    font-weight:700;
+    color:var(--ink-soft);
+    cursor:pointer;
+  }
+  .btn-sair:hover{border-color:var(--maroon); color:var(--maroon);}
+
+  main{padding:28px 0 60px;}
+
+  h2{font-size:1rem; font-weight:800; margin:0 0 14px; color:var(--ink);}
+  .cartao{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:22px;
+    margin-bottom:22px;
+  }
+
+  .links-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  .link-item{
+    background:var(--bg-soft);
+    border-radius:10px;
+    padding:12px 14px;
+  }
+  .link-item .rotulo{font-size:0.8rem; font-weight:700; color:var(--ink-soft); margin-bottom:6px;}
+  .link-item .linha{display:flex; gap:8px; align-items:center;}
+  .link-item input{
+    flex:1;
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:7px 9px;
+    font-size:0.82rem;
+    font-family:monospace;
+    background:#fff;
+    color:var(--ink-soft);
+  }
+  .link-item button{
+    flex:none;
+    background:var(--maroon);
+    color:#fff;
+    border:none;
+    border-radius:6px;
+    padding:7px 12px;
+    font-size:0.8rem;
+    font-weight:700;
+    cursor:pointer;
+  }
+  .link-item button:hover{background:var(--maroon-deep);}
+  .link-item .nota{font-size:0.76rem; color:var(--ink-faint); margin-top:6px;}
+
+  .topo-linha{display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:18px;}
+  select{
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:9px 12px;
+    font-family:var(--sans);
+    font-size:0.9rem;
+    background:#fff;
+    color:var(--ink);
+  }
+
+  .metricas{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:22px;}
+  .metrica{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:18px 20px;
+    text-align:center;
+  }
+  .metrica .num{font-size:1.9rem; font-weight:800; color:var(--maroon);}
+  .metrica .label{font-size:0.8rem; color:var(--ink-soft); margin-top:4px;}
+
+  .chat-lista{
+    max-height:520px;
+    overflow-y:auto;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  .msg{font-size:0.9rem; padding:8px 10px; border-radius:8px; background:var(--bg-soft);}
+  .msg .cab{display:flex; justify-content:space-between; gap:10px; margin-bottom:2px;}
+  .msg .nome{font-weight:800;}
+  .msg .quando{font-size:0.76rem; color:var(--ink-faint); white-space:nowrap;}
+  .msg .contato{font-size:0.76rem; color:var(--ink-faint);}
+  .msg.entrou{background:#fff; border:1px dashed var(--line); color:var(--ink-soft); font-style:italic;}
+  .vazio{color:var(--ink-faint); font-size:0.9rem; text-align:center; padding:30px 0;}
+
+  @media (max-width:700px){
+    .links-grid{grid-template-columns:1fr;}
+    .metricas{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="container">
+      <div class="brand">Instituto <span>Ipê Amarelo</span> — Painel</div>
+      <button class="btn-sair" id="btn-sair" type="button">Sair</button>
+    </div>
+  </div>
+
+  <main>
+    <div class="container">
+
+      <div class="cartao">
+        <h2>Links da sala</h2>
+        <div class="links-grid">
+          <div class="link-item">
+            <div class="rotulo">Sala Principal</div>
+            <div class="linha">
+              <input readonly id="link-principal" value="https://lp2.institutoipeamarelo.com/transmissao.html" />
+              <button type="button" data-alvo="link-principal">Copiar</button>
+            </div>
+            <div class="nota">Link fixo, sempre o mesmo, toda terça-feira.</div>
+          </div>
+          <div class="link-item">
+            <div class="rotulo">Sala com Magic Link</div>
+            <div class="linha">
+              <input readonly id="link-magico" value="https://lp2.institutoipeamarelo.com/transmissao.html?nome={{nome}}&email={{email}}&telefone={{telefone}}" />
+              <button type="button" data-alvo="link-magico">Copiar</button>
+            </div>
+            <div class="nota">Troque {{nome}}, {{email}}, {{telefone}} pelas variáveis do Brevo/Never Lose.</div>
+          </div>
+          <div class="link-item">
+            <div class="rotulo">Sala com Replay</div>
+            <div class="linha">
+              <input readonly id="link-replay" value="https://lp2.institutoipeamarelo.com/replay.html" />
+              <button type="button" data-alvo="link-replay">Copiar</button>
+            </div>
+            <div class="nota">Só funciona dentro da janela de 24h após a aula.</div>
+          </div>
+          <div class="link-item">
+            <div class="rotulo">Sala Teste</div>
+            <div class="linha">
+              <input readonly id="link-teste" value="https://lp2.institutoipeamarelo.com/transmissao.html?modo_teste=1&min=0" />
+              <button type="button" data-alvo="link-teste">Copiar</button>
+            </div>
+            <div class="nota">Ignora a data real. Troque &min=0 pelo minuto que quiser revisar.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="topo-linha">
+        <h2 style="margin:0;">Sessão</h2>
+        <select id="seletor-sessao"></select>
+      </div>
+
+      <div class="metricas">
+        <div class="metrica"><div class="num" id="m-ao-vivo">—</div><div class="label">Ao vivo agora</div></div>
+        <div class="metrica"><div class="num" id="m-leads">—</div><div class="label">Leads capturados</div></div>
+        <div class="metrica"><div class="num" id="m-mensagens">—</div><div class="label">Mensagens no chat</div></div>
+      </div>
+
+      <div class="cartao">
+        <h2>Chat da sessão</h2>
+        <div class="chat-lista" id="chat-lista">
+          <div class="vazio">Carregando...</div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+<script>
+(function(){
+  var sessaoEscolhida = null;
+  var atualizandoAoVivo = false;
+
+  document.getElementById('btn-sair').addEventListener('click', function(){
+    fetch('/api/painel/logout', { method: 'POST' }).then(function(){
+      window.location.href = '/painel-login.html';
+    });
+  });
+
+  document.querySelectorAll('.link-item button').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var input = document.getElementById(btn.getAttribute('data-alvo'));
+      input.select();
+      navigator.clipboard.writeText(input.value).then(function(){
+        var textoOriginal = btn.textContent;
+        btn.textContent = 'Copiado!';
+        setTimeout(function(){ btn.textContent = textoOriginal; }, 1500);
+      }).catch(function(){});
+    });
+  });
+
+  function formatarSessao(iso){
+    var partes = iso.split('-');
+    return partes[2] + '/' + partes[1] + '/' + partes[0];
+  }
+
+  function renderizarMensagens(mensagens){
+    var lista = document.getElementById('chat-lista');
+    if (!mensagens.length){
+      lista.innerHTML = '<div class="vazio">Nenhuma mensagem ainda nessa sessão.</div>';
+      return;
+    }
+    lista.innerHTML = mensagens.map(function(m){
+      var hora = new Date(m.criadoEm).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+      if (m.tipo === 'entrou'){
+        return '<div class="msg entrou">' + escapeHtml(m.nome) + ' entrou no chat <span class="quando">' + hora + '</span></div>';
+      }
+      return '<div class="msg">' +
+        '<div class="cab"><span class="nome">' + escapeHtml(m.nome) + '</span><span class="quando">' + hora + '</span></div>' +
+        '<div>' + escapeHtml(m.texto) + '</div>' +
+        '<div class="contato">' + escapeHtml(m.email || '') + (m.telefone ? ' · ' + escapeHtml(m.telefone) : '') + '</div>' +
+        '</div>';
+    }).join('');
+    lista.scrollTop = lista.scrollHeight;
+  }
+
+  function escapeHtml(s){
+    return (s || '').toString()
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  function carregarDados(sessao){
+    var url = '/api/painel/dados' + (sessao ? ('?sessao=' + encodeURIComponent(sessao)) : '');
+    return fetch(url).then(function(r){
+      if (r.status === 401){
+        window.location.href = '/painel-login.html';
+        return null;
+      }
+      return r.json();
+    });
+  }
+
+  function montarSeletor(sessoes, sessaoSelecionada, sessaoAtual){
+    var select = document.getElementById('seletor-sessao');
+    select.innerHTML = sessoes.map(function(s){
+      var rotulo = formatarSessao(s) + (s === sessaoAtual ? ' (atual)' : '');
+      return '<option value="' + s + '"' + (s === sessaoSelecionada ? ' selected' : '') + '>' + rotulo + '</option>';
+    }).join('');
+  }
+
+  function iniciar(){
+    carregarDados(null).then(function(d){
+      if (!d || !d.ok) return;
+      sessaoEscolhida = d.sessaoSelecionada;
+      montarSeletor(d.sessoes, d.sessaoSelecionada, d.sessaoAtual);
+      aplicarDados(d);
+      iniciarAtualizacaoPeriodica(d.sessaoAtual);
+    });
+  }
+
+  function aplicarDados(d){
+    document.getElementById('m-ao-vivo').textContent = d.aoVivoAgora;
+    document.getElementById('m-leads').textContent = d.totalLeads;
+    document.getElementById('m-mensagens').textContent = d.totalMensagens;
+    renderizarMensagens(d.mensagens);
+  }
+
+  document.getElementById('seletor-sessao').addEventListener('change', function(){
+    sessaoEscolhida = this.value;
+    carregarDados(sessaoEscolhida).then(function(d){ if (d && d.ok) aplicarDados(d); });
+  });
+
+  function iniciarAtualizacaoPeriodica(sessaoAtual){
+    setInterval(function(){
+      // só atualiza sozinho se a pessoa estiver olhando a sessão da terça atual
+      if (sessaoEscolhida !== sessaoAtual || atualizandoAoVivo) return;
+      atualizandoAoVivo = true;
+      carregarDados(sessaoEscolhida).then(function(d){
+        atualizandoAoVivo = false;
+        if (d && d.ok) aplicarDados(d);
+      }).catch(function(){ atualizandoAoVivo = false; });
+    }, 5000);
+  }
+
+  iniciar();
+})();
+</script>
+</body>
+</html>
