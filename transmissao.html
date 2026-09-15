@@ -1,0 +1,1003 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-PCX23KR');</script>
+<!-- End Google Tag Manager -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Transmissão ao vivo | Instituto Ipê Amarelo</title>
+<meta name="robots" content="noindex" />
+<link rel="icon" type="image/png" href="/favicon.png" />
+<style>
+  :root{
+    --bg:#ffffff;
+    --bg-soft:#f5f1ea;
+    --card:#ffffff;
+    --ink:#2a2420;
+    --ink-soft:#655a51;
+    --ink-faint:#8b8079;
+    --maroon:#7c1220;
+    --maroon-deep:#570d17;
+    --maroon-tint:#f7e9e7;
+    --line:rgba(42,36,32,0.14);
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html{font-size:112.5%;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;
+    line-height:1.6;
+    font-size:1.05rem;
+  }
+  img{max-width:100%;display:block;}
+  .container{
+    width:100%;
+    max-width:1640px;
+    margin:0 auto;
+    padding:0 24px;
+  }
+  h1,h2,h3{
+    font-family:var(--sans);
+    font-weight:800;
+    text-wrap:balance;
+    margin:0;
+    color:var(--ink);
+    letter-spacing:-0.01em;
+  }
+  a{color:inherit;}
+  [hidden]{display:none !important;}
+
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    background:var(--maroon);
+    color:#fff;
+    border:1px solid var(--maroon);
+    border-radius:9px;
+    font-family:var(--sans);
+    font-size:1.05rem;
+    font-weight:800;
+    letter-spacing:0.01em;
+    padding:15px 22px;
+    cursor:pointer;
+    text-decoration:none;
+    transition:background 0.2s ease, transform 0.15s ease;
+  }
+  .btn:hover{background:var(--maroon-deep); transform:translateY(-1px);}
+
+  /* ---------- TOPBAR ---------- */
+  .topbar{
+    padding:16px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .topbar .container{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+  }
+  .brand{font-size:1.1rem; font-weight:800; color:var(--ink);}
+  .brand span{color:var(--maroon);}
+  .status-pill{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    background:var(--bg-soft);
+    color:var(--ink-soft);
+    font-size:0.82rem;
+    font-weight:700;
+    padding:7px 14px;
+    border-radius:999px;
+    white-space:nowrap;
+  }
+  .status-pill.ao-vivo{background:var(--maroon); color:#fff;}
+  .status-pill .dot{
+    width:8px; height:8px; border-radius:50%;
+    background:var(--ink-faint);
+  }
+  .status-pill.ao-vivo .dot{
+    background:#fff;
+    animation:pulse 1.4s infinite;
+  }
+  @keyframes pulse{
+    0%,100%{opacity:1;}
+    50%{opacity:0.35;}
+  }
+
+  /* ---------- CONTAGEM ---------- */
+  .tela-contagem{
+    padding:64px 0 72px;
+    text-align:center;
+  }
+  .tela-contagem .container{max-width:620px;}
+  .tela-contagem .eyebrow{
+    font-size:0.85rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--maroon);
+    font-weight:800;
+    display:block;
+    margin-bottom:14px;
+  }
+  .tela-contagem h1{
+    font-size:clamp(1.6rem,3.4vw,2.3rem);
+    line-height:1.25;
+    margin-bottom:16px;
+  }
+  .tela-contagem p.sub{
+    color:var(--ink-soft);
+    font-size:1.08rem;
+    line-height:1.6;
+    max-width:46ch;
+    margin:0 auto 34px;
+  }
+  .contagem-grid{
+    display:flex;
+    justify-content:center;
+    gap:14px;
+    flex-wrap:wrap;
+    margin-bottom:34px;
+  }
+  .contagem-box{
+    background:var(--bg-soft);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:18px 20px;
+    min-width:86px;
+  }
+  .contagem-box .num{
+    font-size:2.1rem;
+    font-weight:800;
+    color:var(--maroon);
+    line-height:1;
+    font-variant-numeric:tabular-nums;
+  }
+  .contagem-box .label{
+    font-size:0.78rem;
+    color:var(--ink-soft);
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+    margin-top:6px;
+  }
+  .tela-contagem .nota{
+    font-size:0.95rem;
+    color:var(--ink-faint);
+  }
+
+  /* ---------- AO VIVO ---------- */
+  .tela-ao-vivo{padding:20px 0 56px;}
+  .titulo-aula{
+    font-size:clamp(1.5rem,2.6vw,2.1rem);
+    line-height:1.25;
+    margin-bottom:18px;
+    max-width:1100px;
+  }
+  .live-layout{
+    display:grid;
+    grid-template-columns:minmax(0,2fr) minmax(320px,420px);
+    gap:24px;
+    align-items:start;
+  }
+  .video-wrap{
+    position:relative;
+    width:100%;
+    aspect-ratio:16/9;
+    background:#000;
+    border-radius:14px;
+    overflow:hidden;
+    box-shadow:0 20px 44px rgba(42,36,32,0.18);
+  }
+  .video-wrap iframe{position:absolute; inset:0; width:100%; height:100%; border:0;}
+  .video-controls{
+    position:absolute;
+    bottom:0; left:0; right:0;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:12px 16px;
+    background:linear-gradient(0deg, rgba(0,0,0,0.6), rgba(0,0,0,0));
+  }
+  .video-overlay-top{
+    position:absolute;
+    top:16px; left:16px;
+    display:flex;
+    gap:8px;
+  }
+  .badge-ao-vivo, .badge-espectadores{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    font-size:0.85rem;
+    font-weight:800;
+    padding:6px 12px;
+    border-radius:999px;
+  }
+  .badge-ao-vivo{background:var(--maroon); color:#fff;}
+  .badge-espectadores{background:rgba(0,0,0,0.5); color:#fff;}
+  .video-controls button{
+    flex:none;
+    background:rgba(255,255,255,0.14);
+    border:1px solid rgba(255,255,255,0.35);
+    color:#fff;
+    border-radius:8px;
+    width:34px; height:34px;
+    cursor:pointer;
+    font-size:1rem;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .video-controls button:hover{background:rgba(255,255,255,0.28);}
+  .slider-volume{
+    flex:none;
+    width:100px;
+    accent-color:#fff;
+    cursor:pointer;
+  }
+  .video-controls .espaco{flex:1;}
+
+  .video-unmute-overlay{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:rgba(0,0,0,0.45);
+    cursor:pointer;
+    z-index:2;
+  }
+  .video-unmute-overlay .cartao{
+    background:rgba(20,17,15,0.92);
+    color:#fff;
+    border-radius:14px;
+    padding:26px 34px;
+    text-align:center;
+  }
+  .video-unmute-overlay .cartao .icone{font-size:1.8rem; margin-bottom:10px;}
+  .video-unmute-overlay .cartao p{margin:0 0 4px; font-weight:800; font-size:1.02rem;}
+  .video-unmute-overlay .cartao span{font-size:0.88rem; opacity:0.85;}
+
+  /* ---------- MODAL DE IDENTIFICAÇÃO ---------- */
+  .modal-backdrop{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.55);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:100;
+  }
+  .modal-cartao{
+    position:relative;
+    background:#fff;
+    border-radius:14px;
+    padding:32px;
+    max-width:460px;
+    width:100%;
+    box-shadow:0 24px 60px rgba(0,0,0,0.3);
+  }
+  .modal-fechar{
+    position:absolute;
+    top:14px; right:14px;
+    background:none;
+    border:none;
+    font-size:1.6rem;
+    line-height:1;
+    color:#a3a3a3;
+    cursor:pointer;
+  }
+  .modal-cartao h2{
+    font-size:1.25rem;
+    line-height:1.3;
+    margin:0 0 22px;
+    padding-right:20px;
+  }
+  #form-gate label{
+    display:block;
+    font-size:0.85rem;
+    font-weight:700;
+    color:var(--ink-soft);
+    margin-bottom:5px;
+  }
+  #form-gate input{
+    width:100%;
+    border:1px solid #e5e5e5;
+    border-radius:6px;
+    padding:10px 12px;
+    font-family:var(--sans);
+    font-size:0.95rem;
+    margin-bottom:16px;
+    outline:none;
+  }
+  #form-gate input:focus{border-color:#a3a3a3;}
+  .btn-verde{
+    display:block;
+    width:100%;
+    background:#16a34a;
+    color:#fff;
+    border:none;
+    border-radius:8px;
+    padding:14px;
+    font-family:var(--sans);
+    font-weight:800;
+    font-size:1rem;
+    text-align:center;
+    text-decoration:none;
+    cursor:pointer;
+    transition:background 0.2s ease;
+  }
+  .btn-verde:hover{background:#15803d;}
+
+  /* ---------- ABA OFERTA ---------- */
+  .chat-oferta{
+    flex:1;
+    overflow-y:auto;
+    padding:16px;
+  }
+  .oferta-card img{
+    width:100%;
+    aspect-ratio:16/10;
+    object-fit:cover;
+    border-radius:10px;
+    margin-bottom:16px;
+  }
+  .oferta-linha{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    margin-bottom:6px;
+  }
+  .oferta-de{
+    color:#a3a3a3;
+    text-decoration:line-through;
+    font-size:0.92rem;
+  }
+  .oferta-tempo{
+    color:#a3a3a3;
+    font-size:0.82rem;
+  }
+  .oferta-preco{
+    font-size:1.3rem;
+    font-weight:800;
+    color:var(--ink);
+    margin-bottom:2px;
+  }
+  .oferta-hoje{
+    font-weight:700;
+    color:var(--maroon);
+    font-size:0.92rem;
+    margin-bottom:16px;
+  }
+  .oferta-countdown{
+    text-align:center;
+    font-size:1.6rem;
+    font-weight:800;
+    font-variant-numeric:tabular-nums;
+    color:var(--ink);
+    margin-top:14px;
+  }
+
+  .chat-panel{
+    background:#fff;
+    border:1px solid #e5e5e5;
+    border-radius:14px;
+    display:flex;
+    flex-direction:column;
+    height:480px;
+    overflow:hidden;
+  }
+  .chat-tabs{
+    display:flex;
+    gap:4px;
+    margin:12px;
+    padding:4px;
+    background:#e5e7eb;
+    border-radius:8px;
+  }
+  .chat-tab{
+    flex:1;
+    background:none;
+    border:none;
+    padding:7px 12px;
+    font-family:var(--sans);
+    font-weight:500;
+    font-size:0.88rem;
+    color:#737373;
+    cursor:pointer;
+    border-radius:6px;
+  }
+  .chat-tab.ativa{background:#fff; color:#0a0a0a;}
+  .chat-lista{
+    flex:1;
+    overflow-y:auto;
+    padding:0 14px 12px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .chat-suporte{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    min-height:0;
+  }
+  .chat-suporte-fallback{padding:20px 16px;}
+  .chat-suporte p{color:var(--ink-soft); font-size:0.92rem; line-height:1.5; margin:0 0 14px;}
+  .chat-suporte-widget{flex:1; min-height:0;}
+  .chat-msg{
+    font-size:0.92rem;
+    line-height:1.4;
+    color:#262626;
+  }
+  .chat-msg .nome{
+    font-weight:700;
+    color:#0a0a0a;
+    margin-right:6px;
+  }
+  .chat-msg.host .nome{color:var(--maroon-deep);}
+  .chat-msg.host{
+    background:#f5f5f5;
+    border-radius:10px;
+    padding:8px 10px;
+  }
+  .chat-msg.propria .nome{color:#737373;}
+  .chat-msg a{color:var(--maroon-deep); font-weight:700;}
+
+  .chat-envio{
+    display:flex;
+    gap:8px;
+    padding:12px 16px;
+  }
+  .chat-envio input{
+    flex:1;
+    border:1px solid #e5e5e5;
+    border-radius:6px;
+    padding:9px 12px;
+    font-family:var(--sans);
+    font-size:0.92rem;
+    color:var(--ink);
+    background:#fff;
+    outline:none;
+  }
+  .chat-envio input:focus{border-color:#a3a3a3;}
+  .chat-envio button{
+    flex:none;
+    width:36px;
+    background:none;
+    color:#525252;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:1.05rem;
+  }
+  .chat-envio button:hover{background:#f5f5f5; color:#0a0a0a;}
+
+  /* ---------- FOOTER ---------- */
+  footer{padding:34px 0 42px; text-align:center;}
+  footer p{font-size:0.9rem; color:var(--ink-faint); line-height:1.7; margin:0;}
+  footer a{color:var(--ink-faint); text-decoration:underline;}
+
+  @media (max-width:900px){
+    .live-layout{grid-template-columns:1fr;}
+    .chat-panel{height:360px;}
+  }
+
+  /* Widget de suporte do Never Lose Sales: usamos só o card (aberto via API JS
+     a partir da nossa aba "Suporte"), escondemos a bolha flutuante nativa
+     deles pra não duplicar com a nossa aba. */
+  #nlc-launcher{display:none !important;}
+</style>
+</head>
+<body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PCX23KR"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+  <div class="topbar">
+    <div class="container">
+      <div class="brand">Instituto <span>Ipê Amarelo</span></div>
+      <div class="status-pill" id="status-pill"><span class="dot"></span><span id="status-texto">Carregando...</span></div>
+    </div>
+  </div>
+
+  <section class="tela-contagem" id="tela-contagem" hidden>
+    <div class="container">
+      <span class="eyebrow">MasterClass ao vivo</span>
+      <h1>A aula com a Anna Patrícia ainda não começou</h1>
+      <p class="sub">Volte aqui na próxima terça-feira às 19h30 (horário de Brasília). A sala abre sozinha no horário — não precisa recarregar a página antes.</p>
+      <div class="contagem-grid">
+        <div class="contagem-box"><div class="num" id="cd-dias">0</div><div class="label">dias</div></div>
+        <div class="contagem-box"><div class="num" id="cd-horas">00</div><div class="label">horas</div></div>
+        <div class="contagem-box"><div class="num" id="cd-min">00</div><div class="label">min</div></div>
+        <div class="contagem-box"><div class="num" id="cd-seg">00</div><div class="label">seg</div></div>
+      </div>
+      <p class="nota">Dica: deixa essa aba aberta ou favoritada — o link é sempre o mesmo, toda terça-feira.</p>
+    </div>
+  </section>
+
+  <section class="tela-ao-vivo" id="tela-ao-vivo" hidden>
+    <div class="container">
+      <h1 class="titulo-aula">MasterClass — Como Reencontrar Desejo, Alegria e Direção Para a Próxima Fase da Sua Vida</h1>
+      <div class="live-layout">
+        <div>
+          <div class="video-wrap">
+            <div id="vimeo-embed"></div>
+            <div class="video-overlay-top">
+              <span class="badge-ao-vivo">● Ao Vivo</span>
+              <span class="badge-espectadores">👁 <span id="contador-espectadores">--</span></span>
+            </div>
+            <div class="video-unmute-overlay" id="unmute-overlay" hidden>
+              <div class="cartao">
+                <div class="icone">🔇</div>
+                <p>Sua aula já começou</p>
+                <span>Clique para ouvir</span>
+              </div>
+            </div>
+            <div class="video-controls">
+              <button id="btn-mute" type="button" title="Som">🔊</button>
+              <input class="slider-volume" id="slider-volume" type="range" min="0" max="1" step="0.05" value="1" title="Volume" />
+              <span class="espaco"></span>
+              <button id="btn-full" type="button" title="Tela cheia">⛶</button>
+            </div>
+          </div>
+        </div>
+        <div class="chat-panel">
+          <div class="chat-tabs">
+            <button class="chat-tab ativa" id="tab-chat" type="button">Chat</button>
+            <button class="chat-tab" id="tab-suporte" type="button">Suporte</button>
+            <button class="chat-tab" id="tab-oferta" type="button" hidden>Oferta</button>
+          </div>
+          <div class="chat-lista" id="chat-lista"></div>
+          <div class="chat-suporte" id="chat-suporte" hidden>
+            <div class="chat-suporte-fallback" id="chat-suporte-fallback">
+              <p>Dúvidas sobre inscrição, pagamento ou formas de participar? Fala com o suporte da Anna:</p>
+              <a class="btn" href="https://wa.me/5512997188268" target="_blank" rel="noopener">Chamar no WhatsApp</a>
+            </div>
+            <div class="chat-suporte-widget" id="chat-suporte-widget"></div>
+          </div>
+          <div class="chat-oferta" id="chat-oferta" hidden>
+            <div class="oferta-card">
+              <img src="/og-image.jpg" alt="Círculo de Mulheres" />
+              <div class="oferta-linha">
+                <span class="oferta-de">De R$ 3.794</span>
+                <span class="oferta-tempo">Por tempo limitado</span>
+              </div>
+              <div class="oferta-preco">Por 12x de R$ 100,50</div>
+              <div class="oferta-hoje">Oferta só hoje!</div>
+              <a class="btn-verde" href="https://lp2.institutoipeamarelo.com/circulo-mulheres" target="_blank" rel="noopener">Reservar Minha Vaga</a>
+              <div class="oferta-countdown" id="oferta-countdown">05:00</div>
+            </div>
+          </div>
+          <form class="chat-envio" id="chat-envio">
+            <input type="text" id="campo-mensagem" placeholder="Digite algo..." maxlength="300" autocomplete="off" />
+            <button type="submit" title="Enviar">➤</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="modal-backdrop" id="modal-gate" hidden>
+    <div class="modal-cartao">
+      <button class="modal-fechar" id="modal-gate-fechar" type="button" aria-label="Fechar">×</button>
+      <h2>MasterClass — Como Reencontrar Desejo, Alegria e Direção Para a Próxima Fase da Sua Vida</h2>
+      <form id="form-gate">
+        <label for="gate-nome">Nome</label>
+        <input type="text" id="gate-nome" placeholder="Como podemos te chamar" required />
+        <label for="gate-email">E-mail</label>
+        <input type="email" id="gate-email" placeholder="Insira um e-mail" required />
+        <label for="gate-telefone">Telefone</label>
+        <input type="tel" id="gate-telefone" placeholder="(11) 91234-5678" required />
+        <button class="btn-verde" type="submit">Entrar no chat →</button>
+      </form>
+    </div>
+  </div>
+
+  <footer>
+    <p>Instituto Ipê Amarelo — Todos Direitos Reservados. CNPJ: 32.337.448/0001-91<br />
+    Dúvidas: <a href="mailto:contato@institutoipeamarelo.com">contato@institutoipeamarelo.com</a></p>
+  </footer>
+
+<script src="https://app.neverlosesales.com.br/widget.js" data-token="v1.1789492910.3e4b439eebabd4a7d6ac315174681d08"></script>
+<script src="https://player.vimeo.com/api/player.js"></script>
+<script>
+(function(){
+  var VIMEO_ID = 1227040131;
+  var DURACAO_FALLBACK = 5395; // segundos — usado só se a busca na API do Vimeo falhar
+  var OFERTA_EM_SEGUNDOS = 4740; // momento em que a Anna solta o link do Círculo de Mulheres
+  var JANELA_REPLAY_MS = 24 * 3600 * 1000;
+
+  var params = new URLSearchParams(location.search);
+
+  // Magic link: ?nome=X&email=Y&telefone=Z chega pronto pra conversar no
+  // chat, sem precisar preencher o portão de novo (usado em disparos do
+  // Brevo/WhatsApp com variáveis já preenchidas).
+  var nomeMagico = params.get('nome');
+  var emailMagico = params.get('email');
+  var telefoneMagico = params.get('telefone');
+  if (nomeMagico && emailMagico){
+    localStorage.setItem('chatNome', nomeMagico);
+    localStorage.setItem('chatEmail', emailMagico);
+    if (telefoneMagico) localStorage.setItem('chatTelefone', telefoneMagico);
+  }
+
+  // Sala Teste: ?modo_teste=1 (opcionalmente &min=45 pra começar num minuto
+  // específico) ignora a data real e abre a aula na hora, pra revisão interna.
+  var modoTeste = params.get('modo_teste') === '1';
+  var minutoTeste = parseFloat(params.get('min') || '0');
+
+  function agoraBrasilia(){
+    var fmt = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/Sao_Paulo',
+      year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit', second: '2-digit',
+      hour12: false
+    });
+    var partes = fmt.formatToParts(new Date());
+    var pega = function(tipo){ return parseInt(partes.find(function(p){ return p.type === tipo; }).value, 10); };
+    return new Date(Date.UTC(pega('year'), pega('month') - 1, pega('day'), pega('hour') % 24, pega('minute'), pega('second')));
+  }
+
+  function proximaTerca1930(agora){
+    var diaSemana = agora.getUTCDay();
+    var diff = (2 - diaSemana + 7) % 7;
+    var alvo = new Date(Date.UTC(agora.getUTCFullYear(), agora.getUTCMonth(), agora.getUTCDate() + diff, 19, 30, 0));
+    if (agora.getTime() >= alvo.getTime()){
+      alvo = new Date(alvo.getTime() + 7 * 24 * 3600 * 1000);
+    }
+    return alvo;
+  }
+
+  function ultimaTerca1930(agora){
+    var diaSemana = agora.getUTCDay();
+    var diff = (diaSemana - 2 + 7) % 7;
+    var alvo = new Date(Date.UTC(agora.getUTCFullYear(), agora.getUTCMonth(), agora.getUTCDate() - diff, 19, 30, 0));
+    if (alvo.getTime() > agora.getTime()){
+      alvo = new Date(alvo.getTime() - 7 * 24 * 3600 * 1000);
+    }
+    return alvo;
+  }
+
+  function pad(n){ return n < 10 ? '0' + n : '' + n; }
+
+  function iniciarContagem(alvoPseudoUTC){
+    document.getElementById('tela-contagem').hidden = false;
+    document.getElementById('status-texto').textContent = 'Próxima terça-feira';
+    function atualizar(){
+      var agora = agoraBrasilia();
+      var restanteMs = alvoPseudoUTC.getTime() - agora.getTime();
+      if (restanteMs <= 0){ window.location.reload(); return; }
+      var totalSeg = Math.floor(restanteMs / 1000);
+      var dias = Math.floor(totalSeg / 86400);
+      var horas = Math.floor((totalSeg % 86400) / 3600);
+      var min = Math.floor((totalSeg % 3600) / 60);
+      var seg = totalSeg % 60;
+      document.getElementById('cd-dias').textContent = dias;
+      document.getElementById('cd-horas').textContent = pad(horas);
+      document.getElementById('cd-min').textContent = pad(min);
+      document.getElementById('cd-seg').textContent = pad(seg);
+    }
+    atualizar();
+    setInterval(atualizar, 1000);
+  }
+
+  function iniciarAoVivo(elapsedInicial, duracao){
+    document.getElementById('tela-ao-vivo').hidden = false;
+    document.getElementById('status-pill').classList.add('ao-vivo');
+    document.getElementById('status-texto').textContent = 'AO VIVO';
+
+    // O painel de chat acompanha a altura real do vídeo (que muda com a
+    // largura da tela por causa do aspect-ratio), em vez de uma altura fixa
+    // arbitrária — evita tanto sobra de espaço quanto o chat crescer sem limite.
+    (function sincronizarAlturaChat(){
+      var video = document.querySelector('.video-wrap');
+      var chat = document.querySelector('.chat-panel');
+      if (!video || !chat) return;
+      var aplicar = function(){
+        if (window.matchMedia('(min-width: 901px)').matches){
+          chat.style.height = video.offsetHeight + 'px';
+        } else {
+          chat.style.height = '';
+        }
+      };
+      if (window.ResizeObserver){
+        new ResizeObserver(aplicar).observe(video);
+      }
+      aplicar();
+      window.addEventListener('resize', aplicar);
+    })();
+
+    var clienteInicio = Date.now();
+    function elapsedAtual(){
+      return elapsedInicial + (Date.now() - clienteInicio) / 1000;
+    }
+
+    var player = new Vimeo.Player('vimeo-embed', {
+      id: VIMEO_ID,
+      autoplay: true,
+      controls: false,
+      title: false,
+      byline: false,
+      portrait: false,
+      dnt: true,
+      responsive: true
+    });
+
+    player.ready().then(function(){
+      return player.setCurrentTime(elapsedAtual());
+    }).then(function(){
+      return player.play();
+    }).then(function(){
+      // Navegadores bloqueiam autoplay com som — se o player caiu pra mudo
+      // sozinho pra conseguir tocar, avisamos e deixamos a pessoa ligar o som.
+      return player.getVolume();
+    }).then(function(volume){
+      if (volume === 0){
+        document.getElementById('unmute-overlay').hidden = false;
+        document.getElementById('btn-mute').textContent = '🔇';
+        document.getElementById('slider-volume').value = 0;
+      }
+    }).catch(function(){});
+
+    setInterval(function(){
+      var esperado = elapsedAtual();
+      player.getCurrentTime().then(function(t){
+        if (Math.abs(t - esperado) > 3){
+          player.setCurrentTime(esperado);
+        }
+      }).catch(function(){});
+    }, 20000);
+
+    function ligarSom(){
+      player.setVolume(1);
+      document.getElementById('slider-volume').value = 1;
+      document.getElementById('btn-mute').textContent = '🔊';
+      document.getElementById('unmute-overlay').hidden = true;
+    }
+
+    document.getElementById('unmute-overlay').addEventListener('click', ligarSom);
+
+    document.getElementById('btn-mute').addEventListener('click', function(){
+      var slider = document.getElementById('slider-volume');
+      if (parseFloat(slider.value) > 0){
+        player.setVolume(0);
+        slider.value = 0;
+        this.textContent = '🔇';
+      } else {
+        ligarSom();
+      }
+    });
+
+    document.getElementById('slider-volume').addEventListener('input', function(){
+      var v = parseFloat(this.value);
+      player.setVolume(v);
+      document.getElementById('btn-mute').textContent = v === 0 ? '🔇' : '🔊';
+      if (v > 0) document.getElementById('unmute-overlay').hidden = true;
+    });
+    document.getElementById('btn-full').addEventListener('click', function(){
+      var wrap = document.querySelector('.video-wrap');
+      if (wrap.requestFullscreen) wrap.requestFullscreen();
+    });
+
+    // Oferta aparece quando a aula chega no momento certo: a aba "Oferta"
+    // surge, a sala troca pra ela automaticamente, e a contagem mostra o
+    // tempo real que falta pra aula acabar (duração do vídeo - elapsed atual),
+    // não um valor fixo — todo mundo vê o relógio bater com o fim de verdade.
+    function iniciarCountdownOferta(){
+      var el = document.getElementById('oferta-countdown');
+      function atualizar(){
+        var restante = Math.max(0, Math.round(duracao - elapsedAtual()));
+        var m = Math.floor(restante / 60), s = restante % 60;
+        el.textContent = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+      }
+      atualizar();
+      setInterval(atualizar, 1000);
+    }
+    function checarOferta(){
+      if (elapsedAtual() >= OFERTA_EM_SEGUNDOS){
+        document.getElementById('tab-oferta').hidden = false;
+        iniciarCountdownOferta();
+        mostrarAba('oferta');
+      } else {
+        setTimeout(checarOferta, 2000);
+      }
+    }
+    checarOferta();
+
+    // Contador de espectadores (curva simulada, mesma pra todo mundo no mesmo instante)
+    function contarEspectadores(elapsedSeg){
+      var min = elapsedSeg / 60;
+      var base;
+      if (min <= 5) base = 30 + min * 15;
+      else if (min <= 15) base = 105 + (min - 5) * 7;
+      else base = Math.max(70, 175 - (min - 15) * 0.85);
+      var onda = Math.round(Math.sin(elapsedSeg / 47) * 4);
+      return Math.max(12, Math.round(base + onda));
+    }
+    function atualizarContador(){
+      document.getElementById('contador-espectadores').textContent = contarEspectadores(elapsedAtual());
+    }
+    atualizarContador();
+    setInterval(atualizarContador, 8000);
+
+    // Abas Chat / Suporte / Oferta
+    // Encaixa o widget de suporte real do Never Lose Sales (agente "MasterClass –
+    // Círculo") DENTRO da aba Suporte, em vez de deixá-lo flutuando por cima da
+    // página. O widget sempre nasce fixo no canto da tela; aqui a gente pega o
+    // elemento que ele mesmo criou (#nlc-container) e muda ele de lugar no DOM
+    // pro nosso painel, sobrescrevendo só o tamanho fixo dele (380x600) pra
+    // preencher 100% do espaço. show/hide passa a ser controlado só pelo
+    // atributo "hidden" da própria aba — chamamos open() uma única vez (nunca
+    // de novo a cada troca de aba, que era o que gerava vários "Erro ao
+    // enviar mensagem" empilhados).
+    function encaixarWidgetSuporte(tentativas){
+      var nlcContainer = document.getElementById('nlc-container');
+      var destino = document.getElementById('chat-suporte-widget');
+      if (nlcContainer && destino){
+        destino.appendChild(nlcContainer);
+        nlcContainer.style.setProperty('width', '100%', 'important');
+        nlcContainer.style.setProperty('height', '100%', 'important');
+        nlcContainer.style.setProperty('border-radius', '0', 'important');
+        nlcContainer.style.setProperty('box-shadow', 'none', 'important');
+        document.getElementById('chat-suporte-fallback').hidden = true;
+        if (window.NeverLoseChat && window.NeverLoseChat.open) window.NeverLoseChat.open();
+      } else if ((tentativas || 0) < 10){
+        setTimeout(function(){ encaixarWidgetSuporte((tentativas || 0) + 1); }, 500);
+      }
+    }
+    encaixarWidgetSuporte();
+
+    function mostrarAba(nome){
+      document.getElementById('tab-chat').classList.toggle('ativa', nome === 'chat');
+      document.getElementById('tab-suporte').classList.toggle('ativa', nome === 'suporte');
+      document.getElementById('tab-oferta').classList.toggle('ativa', nome === 'oferta');
+      document.getElementById('chat-lista').hidden = nome !== 'chat';
+      document.getElementById('chat-suporte').hidden = nome !== 'suporte';
+      document.getElementById('chat-oferta').hidden = nome !== 'oferta';
+      document.getElementById('chat-envio').hidden = nome !== 'chat';
+    }
+    document.getElementById('tab-chat').addEventListener('click', function(){ mostrarAba('chat'); });
+    document.getElementById('tab-suporte').addEventListener('click', function(){ mostrarAba('suporte'); });
+    document.getElementById('tab-oferta').addEventListener('click', function(){ mostrarAba('oferta'); });
+
+    // Salva no Cloudflare KV (via Function) — nunca bloqueia a experiência se falhar
+    function persistirMensagem(dados){
+      dados.elapsedSeg = Math.round(elapsedAtual());
+      fetch('/api/chat-mensagem', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dados)
+      }).catch(function(){});
+    }
+
+    function estaIdentificado(){
+      return !!(localStorage.getItem('chatNome') && localStorage.getItem('chatEmail') && localStorage.getItem('chatTelefone'));
+    }
+
+    function enviarMensagem(texto){
+      var nome = localStorage.getItem('chatNome');
+      var email = localStorage.getItem('chatEmail');
+      var telefone = localStorage.getItem('chatTelefone') || '';
+      adicionarMensagem(document.getElementById('chat-lista'), { nome: nome, texto: texto, host: false, propria: true });
+      persistirMensagem({ tipo: 'mensagem', nome: nome, email: email, telefone: telefone, texto: texto });
+    }
+
+    var mensagemPendente = null;
+
+    // Igual ao modelo: só pede nome/e-mail/telefone quando a pessoa tenta
+    // mandar a primeira mensagem — não trava o resto da experiência.
+    document.getElementById('chat-envio').addEventListener('submit', function(e){
+      e.preventDefault();
+      var campo = document.getElementById('campo-mensagem');
+      var texto = campo.value.trim();
+      if (!texto) return;
+      if (!estaIdentificado()){
+        mensagemPendente = texto;
+        document.getElementById('gate-nome').value = localStorage.getItem('chatNome') || '';
+        document.getElementById('gate-email').value = localStorage.getItem('chatEmail') || '';
+        document.getElementById('gate-telefone').value = localStorage.getItem('chatTelefone') || '';
+        document.getElementById('modal-gate').hidden = false;
+        return;
+      }
+      enviarMensagem(texto);
+      campo.value = '';
+    });
+
+    document.getElementById('form-gate').addEventListener('submit', function(e){
+      e.preventDefault();
+      var nome = document.getElementById('gate-nome').value.trim();
+      var email = document.getElementById('gate-email').value.trim();
+      var telefone = document.getElementById('gate-telefone').value.trim();
+      if (!nome || !email || !telefone) return;
+      localStorage.setItem('chatNome', nome);
+      localStorage.setItem('chatEmail', email);
+      localStorage.setItem('chatTelefone', telefone);
+      persistirMensagem({ tipo: 'entrou', nome: nome, email: email, telefone: telefone });
+      document.getElementById('modal-gate').hidden = true;
+      if (mensagemPendente){
+        enviarMensagem(mensagemPendente);
+        mensagemPendente = null;
+        document.getElementById('campo-mensagem').value = '';
+      }
+    });
+
+    document.getElementById('modal-gate-fechar').addEventListener('click', function(){
+      document.getElementById('modal-gate').hidden = true;
+      mensagemPendente = null;
+    });
+
+    // Chat simulado
+    fetch('/data/chat-transmissao.json').then(function(r){ return r.json(); }).then(function(mensagens){
+      var lista = document.getElementById('chat-lista');
+      var proximoIndice = 0;
+      // ao entrar, já mostra as mensagens que "aconteceram" antes de chegar (últimas 25)
+      var jaPassaram = mensagens.filter(function(m){ return m.sec <= elapsedAtual(); });
+      var recentes = jaPassaram.slice(-25);
+      recentes.forEach(function(m){ adicionarMensagem(lista, m); });
+      proximoIndice = mensagens.indexOf(jaPassaram[jaPassaram.length - 1]) + 1;
+      if (jaPassaram.length === 0) proximoIndice = 0;
+
+      setInterval(function(){
+        var agoraElapsed = elapsedAtual();
+        while (proximoIndice < mensagens.length && mensagens[proximoIndice].sec <= agoraElapsed){
+          adicionarMensagem(lista, mensagens[proximoIndice]);
+          proximoIndice++;
+        }
+      }, 1000);
+    }).catch(function(){});
+
+    function linkify(texto){
+      return texto.replace(/(https?:\/\/[^\s]+)/g, function(url){
+        return '<a href="' + url + '" target="_blank" rel="noopener">' + url + '</a>';
+      });
+    }
+
+    function adicionarMensagem(lista, m){
+      var div = document.createElement('div');
+      div.className = 'chat-msg' + (m.host ? ' host' : '') + (m.propria ? ' propria' : '');
+      var sufixo = m.host ? ' • Facilitadora' : (m.propria ? ' (você)' : '');
+      div.innerHTML = '<span class="nome">' + m.nome + sufixo + '</span>' + linkify(m.texto);
+      lista.appendChild(div);
+      lista.scrollTop = lista.scrollHeight;
+    }
+  }
+
+  function decidir(duracao){
+    if (modoTeste){
+      iniciarAoVivo(Math.min(minutoTeste * 60, duracao), duracao);
+      return;
+    }
+
+    var agora = agoraBrasilia();
+    var ultima = ultimaTerca1930(agora);
+    var elapsed = (agora.getTime() - ultima.getTime()) / 1000;
+
+    if (elapsed >= 0 && elapsed <= duracao){
+      iniciarAoVivo(elapsed, duracao);
+    } else if (elapsed > duracao && elapsed * 1000 <= duracao * 1000 + JANELA_REPLAY_MS){
+      window.location.href = '/replay.html';
+    } else {
+      iniciarContagem(proximaTerca1930(agora));
+    }
+  }
+
+  fetch('https://vimeo.com/api/oembed.json?url=' + encodeURIComponent('https://vimeo.com/' + VIMEO_ID))
+    .then(function(r){ return r.json(); })
+    .then(function(d){ decidir(d.duration || DURACAO_FALLBACK); })
+    .catch(function(){ decidir(DURACAO_FALLBACK); });
+})();
+</script>
+
+</body>
+</html>
