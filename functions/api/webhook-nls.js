@@ -22,6 +22,8 @@ export async function onRequestPost(context) {
   const name = (data.name || "").toString().trim();
   const email = (data.email || "").toString().trim();
   const phone = (data.phone || "").toString().trim();
+  const quizScore = data.quiz_score;
+  const quizResultado = (data.quiz_resultado || "").toString().trim();
 
   const nlsPayload = {
     event: "lead_masterclass_circulo_mulheres",
@@ -32,6 +34,8 @@ export async function onRequestPost(context) {
     product: {
       name: "MasterClass: A Próxima Fase da Sua Vida",
     },
+    ...(Number.isFinite(quizScore) ? { quiz_score: quizScore } : {}),
+    ...(quizResultado ? { quiz_resultado: quizResultado } : {}),
     timestamp: new Date().toISOString(),
   };
 

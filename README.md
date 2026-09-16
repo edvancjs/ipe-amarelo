@@ -10,3 +10,4 @@ lp2.institutoipeamarelo.com
 
 ## Páginas
 - `index.html` — MasterClass ao vivo "MasterClass: A Próxima Fase da Sua Vida" (frase completa no H1: "Como Reencontrar Desejo, Alegria e Direção Para a Próxima Fase da Sua Vida"), recorrente toda terça-feira 19h30
+- `teste.html` — quiz "Você Está Vivendo Sua Vida?" (10 perguntas, pontuação, 4 faixas de resultado), captura lead antes de revelar o resultado e convida pra MasterClass
