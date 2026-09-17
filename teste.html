@@ -157,11 +157,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     cursor:pointer;
     transition:border-color 0.15s ease, background 0.15s ease, transform 0.1s ease;
   }
-  .option-btn:hover{border-color:var(--maroon); background:var(--maroon-tint);}
+  @media (hover:hover) and (pointer:fine){
+    .option-btn:hover{border-color:var(--maroon);}
+  }
   .option-btn.selected{
     border-color:var(--maroon);
-    background:var(--maroon-tint);
-    color:var(--maroon-deep);
+    background:var(--maroon);
+    color:#fff;
     font-weight:700;
   }
 
@@ -475,13 +477,22 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     window.scrollTo({top:0, behavior:'smooth'});
   }
 
+  function embaralhar(lista){
+    var arr = lista.slice();
+    for (var i = arr.length - 1; i > 0; i--){
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+    }
+    return arr;
+  }
+
   function renderPergunta(){
     var p = PERGUNTAS[indiceAtual];
     document.getElementById('q-tag').textContent = p.tag;
     document.getElementById('q-texto').textContent = p.texto;
     var opcoesEl = document.getElementById('q-opcoes');
     opcoesEl.innerHTML = '';
-    p.opcoes.forEach(function(op){
+    embaralhar(p.opcoes).forEach(function(op){
       var btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'option-btn';
