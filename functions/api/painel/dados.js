@@ -22,16 +22,6 @@ async function listarTudoComPrefixo(env, prefixo) {
   return itens;
 }
 
-function retencaoMediaMinutos(chavesAlcance) {
-  const registros = chavesAlcance.map((k) => k.metadata).filter(Boolean);
-  if (!registros.length) return 0;
-  const somaMin = registros.reduce((soma, r) => {
-    const dur = (new Date(r.ultimo) - new Date(r.primeiro)) / 60000;
-    return soma + (Number.isFinite(dur) && dur >= 0 ? dur : 0);
-  }, 0);
-  return somaMin / registros.length;
-}
-
 // Só retorna a contagem se existir um retrato a até 6min do alvo — senão o
 // pitch ainda nem aconteceu nessa sessão (ou a sessão acabou antes dele).
 function audienciaNoMinutoMaisProximo(serieOrdenada, minutoAlvo) {
@@ -78,9 +68,8 @@ export async function onRequestGet(context) {
     ? await listarTudoComPrefixo(env, `presenca:${sessaoAtual}:`)
     : [];
 
-  const [chavesSerie, chavesAlcance, picoBruto] = await Promise.all([
+  const [chavesSerie, picoBruto] = await Promise.all([
     listarTudoComPrefixo(env, `serie:${sessaoSelecionada}:`),
-    listarTudoComPrefixo(env, `alcance:${sessaoSelecionada}:`),
     env.CHAT_KV.get(`pico:${sessaoSelecionada}`),
   ]);
 
@@ -109,7 +98,6 @@ export async function onRequestGet(context) {
       totalMensagens,
       mensagens,
       picoAoVivo,
-      retencaoMediaMin: retencaoMediaMinutos(chavesAlcance),
       audienciaNoPitch,
       minutoPitchAlvo: minutoAlvoPitch,
       serieAudiencia,

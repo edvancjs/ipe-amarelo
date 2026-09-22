@@ -34,10 +34,14 @@ export async function onRequestPost(context) {
   const sessao = ultimaTercaISO();
   await env.CHAT_KV.put(`presenca:${sessao}:${viewerId}`, "1", { expirationTtl: 60 });
 
-  // Alcance (primeiro/último sinal, pra retenção média) e retrato de audiência
-  // por minuto (pro gráfico/pico/pitch) — roda depois de já ter respondido o
-  // heartbeat, nunca atrasa nem quebra a resposta pra quem está assistindo.
-  context.waitUntil(registrarAnalytics(env, sessao, viewerId).catch(() => {}));
+  // Retrato de audiência por minuto (pro gráfico/pico/pitch do painel) — roda
+  // depois de já ter respondido o heartbeat, nunca atrasa nem quebra a
+  // resposta pra quem está assistindo. Travado a 1x por minuto (não por
+  // heartbeat) de propósito: já existiu aqui uma leitura+escrita por
+  // heartbeat de cada visitante (pra retenção média) que sobrecarregou o KV
+  // com centenas de pessoas ao vivo e derrubou o /api/painel/dados com 500 —
+  // removida. Ver log-access/problemas/.
+  context.waitUntil(registrarSnapshotAudiencia(env, sessao).catch(() => {}));
 
   return new Response(JSON.stringify({ ok: true }), {
     status: 200,
@@ -45,24 +49,8 @@ export async function onRequestPost(context) {
   });
 }
 
-async function registrarAnalytics(env, sessao, viewerId) {
+async function registrarSnapshotAudiencia(env, sessao) {
   const agora = agoraBrasilia();
-  const agoraISO = agora.toISOString();
-
-  try {
-    const chaveAlcance = `alcance:${sessao}:${viewerId}`;
-    const existente = await env.CHAT_KV.get(chaveAlcance, "json");
-    const primeiro = existente && existente.primeiro ? existente.primeiro : agoraISO;
-    const registro = { primeiro, ultimo: agoraISO };
-    // Metadata junto do valor: o painel consegue somar a retenção de todo
-    // mundo com um list() só, sem um get() por visitante.
-    await env.CHAT_KV.put(chaveAlcance, JSON.stringify(registro), {
-      expirationTtl: TTL_ANALYTICS,
-      metadata: registro,
-    });
-  } catch (e) {
-    // best-effort — retenção não pode derrubar o heartbeat de presença
-  }
 
   try {
     const minuto = minutoISO(agora);
