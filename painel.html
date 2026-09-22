@@ -135,13 +135,6 @@
   }
   .btn-csv:hover{background:var(--maroon-deep);}
 
-  .grafico-wrap{overflow-x:auto;}
-  .grafico-eixo{font-size:0.72rem; fill:var(--ink-faint); font-family:var(--sans);}
-  .grafico-linha{fill:none; stroke:var(--maroon); stroke-width:2;}
-  .grafico-area{fill:var(--maroon-tint); opacity:0.6;}
-  .grafico-pitch{stroke:var(--ink-soft); stroke-width:1; stroke-dasharray:4 3;}
-  .grafico-pitch-label{font-size:0.68rem; fill:var(--ink-soft); font-family:var(--sans);}
-
   .envio-admin-linha{display:flex; gap:10px; align-items:flex-start;}
   .envio-admin-linha textarea{
     flex:1;
@@ -252,17 +245,6 @@
         <div class="metrica"><div class="num" id="m-leads">—</div><div class="label">Leads capturados</div></div>
         <div class="metrica"><div class="num" id="m-mensagens">—</div><div class="label">Mensagens no chat</div></div>
       </div>
-      <div class="metricas">
-        <div class="metrica"><div class="num" id="m-pico">—</div><div class="label">Pico ao vivo</div></div>
-        <div class="metrica"><div class="num" id="m-pitch">—</div><div class="label">Audiência no pitch</div></div>
-      </div>
-
-      <div class="cartao">
-        <h2>Audiência ao vivo</h2>
-        <div class="grafico-wrap" id="grafico-wrap">
-          <div class="vazio">Carregando...</div>
-        </div>
-      </div>
 
       <div class="cartao">
         <h2>Enviar mensagem para quem está ao vivo agora</h2>
@@ -368,64 +350,11 @@
     });
   }
 
-  function renderizarGrafico(serie, minutoPitchAlvo){
-    var wrap = document.getElementById('grafico-wrap');
-    if (!serie || !serie.length){
-      wrap.innerHTML = '<div class="vazio">Sem dados de audiência ainda nessa sessão.</div>';
-      return;
-    }
-
-    var largura = Math.max(600, serie.length * 14);
-    var altura = 180;
-    var margemBaixo = 22;
-    var margemCima = 12;
-    var alturaUtil = altura - margemBaixo - margemCima;
-    var maxContagem = Math.max.apply(null, serie.map(function(p){ return p.contagem; }).concat([1]));
-
-    function x(i){ return serie.length === 1 ? largura / 2 : (i / (serie.length - 1)) * (largura - 20) + 10; }
-    function y(v){ return margemCima + alturaUtil - (v / maxContagem) * alturaUtil; }
-
-    var pontosLinha = serie.map(function(p, i){ return x(i) + ',' + y(p.contagem); }).join(' ');
-    var pontosArea = pontosLinha + ' ' + x(serie.length - 1) + ',' + (altura - margemBaixo) + ' ' + x(0) + ',' + (altura - margemBaixo);
-
-    // Marcador vertical no minuto mais próximo do pitch, se existir dado ali perto.
-    var marcadorPitch = '';
-    if (minutoPitchAlvo){
-      var idxMaisProximo = 0;
-      var menorDiff = Infinity;
-      serie.forEach(function(p, i){
-        var diff = Math.abs(new Date(p.minuto) - new Date(minutoPitchAlvo));
-        if (diff < menorDiff){ menorDiff = diff; idxMaisProximo = i; }
-      });
-      // só desenha se o ponto mais próximo estiver a até 6min do alvo (senão o pitch nem rolou ainda nessa sessão)
-      if (menorDiff <= 6 * 60000){
-        var xp = x(idxMaisProximo);
-        marcadorPitch = '<line class="grafico-pitch" x1="' + xp + '" y1="' + margemCima + '" x2="' + xp + '" y2="' + (altura - margemBaixo) + '" />' +
-          '<text class="grafico-pitch-label" x="' + xp + '" y="' + (margemCima - 2) + '" text-anchor="middle">pitch</text>';
-      }
-    }
-
-    var primeiraHora = new Date(serie[0].minuto).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-    var ultimaHora = new Date(serie[serie.length - 1].minuto).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-
-    wrap.innerHTML =
-      '<svg width="' + largura + '" height="' + (altura + 14) + '" viewBox="0 0 ' + largura + ' ' + (altura + 14) + '">' +
-        '<polygon class="grafico-area" points="' + pontosArea + '"></polygon>' +
-        '<polyline class="grafico-linha" points="' + pontosLinha + '"></polyline>' +
-        marcadorPitch +
-        '<text class="grafico-eixo" x="10" y="' + (altura + 12) + '">' + primeiraHora + '</text>' +
-        '<text class="grafico-eixo" x="' + (largura - 10) + '" y="' + (altura + 12) + '" text-anchor="end">' + ultimaHora + '</text>' +
-      '</svg>';
-  }
-
   function aplicarDados(d){
     document.getElementById('m-ao-vivo').textContent = d.aoVivoAgora;
     document.getElementById('m-leads').textContent = d.totalLeads;
     document.getElementById('m-mensagens').textContent = d.totalMensagens;
-    document.getElementById('m-pico').textContent = d.picoAoVivo || 0;
-    document.getElementById('m-pitch').textContent = (d.audienciaNoPitch === null || d.audienciaNoPitch === undefined) ? '—' : d.audienciaNoPitch;
     document.getElementById('btn-csv').href = '/api/painel/exportar-chat?sessao=' + encodeURIComponent(d.sessaoSelecionada);
-    renderizarGrafico(d.serieAudiencia, d.minutoPitchAlvo);
     renderizarMensagens(d.mensagens);
 
     var ehSessaoAoVivo = d.sessaoSelecionada === d.sessaoAtual;
