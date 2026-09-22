@@ -3,8 +3,13 @@
 // Protegido por login — ver functions/_lib/auth.js.
 
 import { estaAutenticado, respostaNaoAutorizado } from "../../_lib/auth.js";
-import { ultimaTercaISO } from "../../_lib/tempo.js";
+import { ultimaTercaISO, minutoAposInicioSessao } from "../../_lib/tempo.js";
 import { listarSessoes } from "../../_lib/sessoes.js";
+
+// Precisa ficar em sincronia com OFERTA_EM_SEGUNDOS em transmissao.html (o
+// momento em que a Anna solta o link do Círculo de Mulheres) — duplicado de
+// propósito aqui pra este arquivo não depender do HTML da transmissão.
+const OFERTA_EM_SEGUNDOS = 4740;
 
 async function listarTudoComPrefixo(env, prefixo) {
   const itens = [];
@@ -15,6 +20,33 @@ async function listarTudoComPrefixo(env, prefixo) {
     cursor = pagina.list_complete ? undefined : pagina.cursor;
   } while (cursor);
   return itens;
+}
+
+function retencaoMediaMinutos(chavesAlcance) {
+  const registros = chavesAlcance.map((k) => k.metadata).filter(Boolean);
+  if (!registros.length) return 0;
+  const somaMin = registros.reduce((soma, r) => {
+    const dur = (new Date(r.ultimo) - new Date(r.primeiro)) / 60000;
+    return soma + (Number.isFinite(dur) && dur >= 0 ? dur : 0);
+  }, 0);
+  return somaMin / registros.length;
+}
+
+// Só retorna a contagem se existir um retrato a até 6min do alvo — senão o
+// pitch ainda nem aconteceu nessa sessão (ou a sessão acabou antes dele).
+function audienciaNoMinutoMaisProximo(serieOrdenada, minutoAlvo) {
+  if (!serieOrdenada.length) return null;
+  let melhor = null;
+  let menorDiff = Infinity;
+  for (const ponto of serieOrdenada) {
+    const diff = Math.abs(new Date(ponto.minuto) - new Date(minutoAlvo));
+    if (diff < menorDiff) {
+      menorDiff = diff;
+      melhor = ponto;
+    }
+  }
+  if (!melhor || menorDiff > 6 * 60000) return null;
+  return melhor.contagem;
 }
 
 export async function onRequestGet(context) {
@@ -46,6 +78,26 @@ export async function onRequestGet(context) {
     ? await listarTudoComPrefixo(env, `presenca:${sessaoAtual}:`)
     : [];
 
+  const [chavesSerie, chavesAlcance, picoBruto] = await Promise.all([
+    listarTudoComPrefixo(env, `serie:${sessaoSelecionada}:`),
+    listarTudoComPrefixo(env, `alcance:${sessaoSelecionada}:`),
+    env.CHAT_KV.get(`pico:${sessaoSelecionada}`),
+  ]);
+
+  const serieAudiencia = chavesSerie
+    .map((k) => k.metadata)
+    .filter(Boolean)
+    .sort((a, b) => (a.minuto < b.minuto ? -1 : a.minuto > b.minuto ? 1 : 0));
+
+  const picoAoVivo = Math.max(
+    parseInt(picoBruto || "0", 10),
+    ...serieAudiencia.map((p) => p.contagem),
+    0
+  );
+
+  const minutoAlvoPitch = minutoAposInicioSessao(sessaoSelecionada, OFERTA_EM_SEGUNDOS);
+  const audienciaNoPitch = audienciaNoMinutoMaisProximo(serieAudiencia, minutoAlvoPitch);
+
   return new Response(
     JSON.stringify({
       ok: true,
@@ -56,6 +108,11 @@ export async function onRequestGet(context) {
       totalLeads: emailsUnicos.size,
       totalMensagens,
       mensagens,
+      picoAoVivo,
+      retencaoMediaMin: retencaoMediaMinutos(chavesAlcance),
+      audienciaNoPitch,
+      minutoPitchAlvo: minutoAlvoPitch,
+      serieAudiencia,
     }),
     { status: 200, headers: { "Content-Type": "application/json" } }
   );
