@@ -256,7 +256,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   /* ---------- SECTION GENERICS ---------- */
   .section{padding:64px 0;}
   .section.soft{background:var(--bg-soft);}
-  .section-narrow .container{max-width:700px;}
+  /* Largura única pra todo bloco de texto corrido da página — mesmo valor
+     em todo lugar, pra não ter coluna de texto com larguras diferentes. */
+  .prose{max-width:960px; margin:0 auto;}
+  .section-narrow .container{max-width:960px;}
   .section p{
     font-size:1.18rem;
     line-height:1.7;
@@ -298,11 +301,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   }
 
   /* ---------- BLOCO 2 — VIRADA (quote grande) ---------- */
+  /* Fundo levemente rosado (mesmo tom do eyebrow) só nesses blocos de quote —
+     separa visualmente da seção branca antes e depois, sem precisar mexer
+     na alternância de cores do resto da página. */
   .big-quote{
     text-align:center;
     padding:56px 0;
+    background:var(--maroon-tint);
   }
-  .big-quote .container{max-width:760px;}
+  .big-quote .container{max-width:960px;}
   .big-quote p{
     font-size:clamp(1.5rem,3vw,2rem);
     font-weight:800;
@@ -855,7 +862,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <span class="eyebrow">Apresentando</span>
         <h2>O Círculo Terapêutico de Mulheres Online</h2>
       </div>
-      <div class="section-narrow" style="max-width:700px; margin:0 auto;">
+      <div class="prose">
         <p>Uma jornada para mulheres que decidiram parar de apenas compreender — e começar a se transformar de verdade.</p>
         <p>O Círculo não é mais um curso. Não é um lugar para acumular informação. Não é uma série de aulas gravadas para você assistir sozinha e abandonar na terceira semana.</p>
         <p>É uma experiência. Um processo. Uma travessia.</p>
@@ -987,7 +994,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="container">
       <div class="kicker reveal">
         <h2>Escolha o caminho que faz sentido para você agora</h2>
-        <p style="max-width:660px; margin:14px auto 0; font-size:1.02rem; color:var(--ink-soft);">As duas opções te dão acesso completo ao Círculo. A diferença está na duração da sua jornada, no número de encontros comigo e no tempo de acesso ao conteúdo.</p>
+        <p class="prose" style="margin-top:14px; font-size:1.02rem; color:var(--ink-soft);">As duas opções te dão acesso completo ao Círculo. A diferença está na duração da sua jornada, no número de encontros comigo e no tempo de acesso ao conteúdo.</p>
       </div>
 
       <div class="offers reveal">
