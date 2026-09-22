@@ -301,28 +301,29 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   }
 
   /* ---------- BLOCO 2 — VIRADA (quote grande) ---------- */
-  /* Fundo levemente rosado (mesmo tom do eyebrow) só nesses blocos de quote —
-     separa visualmente da seção branca antes e depois, sem precisar mexer
-     na alternância de cores do resto da página. */
+  /* Bloco sólido em vinho escuro só nesses trechos de quote — separa com
+     força da seção branca antes e depois, sem precisar mexer na alternância
+     de cores do resto da página. */
   .big-quote{
     text-align:center;
-    padding:56px 0;
-    background:var(--maroon-tint);
+    padding:64px 0;
+    background:var(--maroon-deep);
   }
   .big-quote .container{max-width:960px;}
   .big-quote p{
     font-size:clamp(1.5rem,3vw,2rem);
     font-weight:800;
     line-height:1.4;
-    color:var(--maroon-deep);
+    color:#fff;
     margin-bottom:18px;
   }
   .big-quote .support{
     font-size:1.15rem;
     font-weight:500;
-    color:var(--ink-soft);
+    color:rgba(255,255,255,0.82);
     line-height:1.7;
   }
+  .big-quote .support b{color:#f4cfc7; font-weight:800;}
 
   /* ---------- BLOCO 3 — HISTÓRIA / AUTORIDADE ---------- */
   .authority .container{
