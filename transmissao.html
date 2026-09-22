@@ -261,10 +261,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     border-radius:14px;
     padding:26px 34px;
     text-align:center;
+    animation:pulseCartaoSom 1.8s ease-in-out infinite;
   }
   .video-unmute-overlay .cartao .icone{font-size:1.8rem; margin-bottom:10px;}
   .video-unmute-overlay .cartao p{margin:0 0 4px; font-weight:800; font-size:1.02rem;}
   .video-unmute-overlay .cartao span{font-size:0.88rem; opacity:0.85;}
+  @keyframes pulseCartaoSom{
+    0%,100%{ transform:scale(1); }
+    50%{ transform:scale(1.05); }
+  }
 
   /* ---------- MODAL DE IDENTIFICAÇÃO ---------- */
   .modal-backdrop{
@@ -726,6 +731,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     var player = new Vimeo.Player('vimeo-embed', {
       id: VIMEO_ID,
       autoplay: true,
+      muted: true,
       controls: false,
       title: false,
       byline: false,
@@ -734,21 +740,22 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       responsive: true
     });
 
+    function mostrarOverlaySom(){
+      document.getElementById('unmute-overlay').hidden = false;
+      document.getElementById('btn-mute').textContent = '🔇';
+      document.getElementById('slider-volume').value = 0;
+    }
+
+    // O vídeo sempre começa mudo de propósito (é a única forma de garantir
+    // autoplay em todo navegador) — por isso sempre mostramos o cartão
+    // central convidando a pessoa a ligar o som com um clique.
     player.ready().then(function(){
       return player.setCurrentTime(elapsedAtual());
     }).then(function(){
-      return player.play();
-    }).then(function(){
-      // Navegadores bloqueiam autoplay com som — se o player caiu pra mudo
-      // sozinho pra conseguir tocar, avisamos e deixamos a pessoa ligar o som.
-      return player.getVolume();
-    }).then(function(volume){
-      if (volume === 0){
-        document.getElementById('unmute-overlay').hidden = false;
-        document.getElementById('btn-mute').textContent = '🔇';
-        document.getElementById('slider-volume').value = 0;
-      }
-    }).catch(function(){});
+      mostrarOverlaySom();
+    }).catch(function(){
+      mostrarOverlaySom();
+    });
 
     setInterval(function(){
       var esperado = elapsedAtual();
