@@ -983,6 +983,26 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       }, 1000);
     }).catch(function(){});
 
+    // Mensagens que a equipe manda pelo painel interno — aparecem pra todo
+    // mundo assistindo agora, como "Equipe Ipê Amarelo". Só adiciona, nunca
+    // mexe no chat simulado nem no que a pessoa já digitou.
+    (function pollMensagensEquipe(){
+      var lista = document.getElementById('chat-lista');
+      var jaMostradas = {};
+      function checar(){
+        fetch('/api/chat-admin-mensagens').then(function(r){ return r.json(); }).then(function(d){
+          if (!d || !d.ok || !d.mensagens) return;
+          d.mensagens.forEach(function(m){
+            if (jaMostradas[m.criadoEm]) return;
+            jaMostradas[m.criadoEm] = true;
+            adicionarMensagem(lista, { nome: m.nome, texto: m.texto, host: true, sufixo: '' });
+          });
+        }).catch(function(){});
+      }
+      checar();
+      setInterval(checar, 6000);
+    })();
+
     function linkify(texto){
       return texto.replace(/(https?:\/\/[^\s]+)/g, function(url){
         return '<a href="' + url + '" target="_blank" rel="noopener">' + url + '</a>';
@@ -992,7 +1012,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     function adicionarMensagem(lista, m){
       var div = document.createElement('div');
       div.className = 'chat-msg' + (m.host ? ' host' : '') + (m.propria ? ' propria' : '');
-      var sufixo = m.host ? ' • Facilitadora' : (m.propria ? ' (você)' : '');
+      var sufixo = m.host ? (m.sufixo !== undefined ? m.sufixo : ' • Facilitadora') : (m.propria ? ' (você)' : '');
       div.innerHTML = '<span class="nome">' + m.nome + sufixo + '</span>' + linkify(m.texto);
       lista.appendChild(div);
       lista.scrollTop = lista.scrollHeight;
