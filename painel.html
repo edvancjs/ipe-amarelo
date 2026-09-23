@@ -106,6 +106,7 @@
   }
 
   .metricas{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:14px;}
+  .metricas.metricas-2{grid-template-columns:repeat(2,1fr);}
   .metrica{
     background:#fff;
     border:1px solid var(--line);
@@ -181,7 +182,7 @@
 
   @media (max-width:700px){
     .links-grid{grid-template-columns:1fr;}
-    .metricas{grid-template-columns:1fr;}
+    .metricas, .metricas.metricas-2{grid-template-columns:1fr;}
   }
 </style>
 </head>
@@ -244,6 +245,10 @@
         <div class="metrica"><div class="num" id="m-ao-vivo">—</div><div class="label">Ao vivo agora</div></div>
         <div class="metrica"><div class="num" id="m-leads">—</div><div class="label">Leads capturados</div></div>
         <div class="metrica"><div class="num" id="m-mensagens">—</div><div class="label">Mensagens no chat</div></div>
+      </div>
+      <div class="metricas metricas-2">
+        <div class="metrica"><div class="num" id="m-pico">—</div><div class="label">Pico ao vivo</div></div>
+        <div class="metrica"><div class="num" id="m-pitch">—</div><div class="label">Audiência no pitch</div></div>
       </div>
 
       <div class="cartao">
@@ -354,6 +359,8 @@
     document.getElementById('m-ao-vivo').textContent = d.aoVivoAgora;
     document.getElementById('m-leads').textContent = d.totalLeads;
     document.getElementById('m-mensagens').textContent = d.totalMensagens;
+    document.getElementById('m-pico').textContent = d.picoAoVivo || 0;
+    document.getElementById('m-pitch').textContent = (d.audienciaNoPitch === null || d.audienciaNoPitch === undefined) ? '—' : d.audienciaNoPitch;
     document.getElementById('btn-csv').href = '/api/painel/exportar-chat?sessao=' + encodeURIComponent(d.sessaoSelecionada);
     renderizarMensagens(d.mensagens);
 
